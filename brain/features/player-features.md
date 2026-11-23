@@ -2,7 +2,7 @@
 
 Three player features the user asked for, grouped in M5 of the [roadmap](../../ROADMAP.md). Each needs work on the
 Nightglass side as well as in Halcyon, so each carries an open decision. The facts on what YouTube offers for each
-are being gathered by a facts-only researcher in `brain/specs/sources/chapters-quality-subs.md` (coming); read it
+were gathered by a facts-only researcher in [chapters-quality-subs](../specs/sources/chapters-quality-subs.md); read it
 before deciding.
 
 ## Subtitle selector

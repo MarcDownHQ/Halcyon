@@ -40,7 +40,7 @@ Small, concrete work: fixes, chores, decisions to make before a roadmap item sta
 
 ## Before M5 (captions, quality, chapters)
 
-- [ ] Read `brain/specs/sources/chapters-quality-subs.md` once it lands, then decide how quality is offered (several
+- [ ] Read [chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md), then decide how quality is offered (several
       video tracks or the HLS master) and the shape of chapters in the contract.
 
 ## Before M6 (login)

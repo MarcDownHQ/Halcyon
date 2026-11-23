@@ -69,7 +69,7 @@ The smallest useful slice. No JS engine, no PO token, no relay.
 
 Replaces SPEC's captions-only M5 with the three player features asked for. Each needs work on the Nightglass side
 too; the facts on what YouTube offers for each are being gathered in
-`brain/specs/sources/chapters-quality-subs.md` (coming).
+[chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md).
 
 - [ ] **Subtitles.** Caption tracks as `playback.tracks` (VTT, `xosf` removed, `exp`-gated tracks skipped, manual
       before auto-generated, about 10 at most). They already fit the contract; the Nightglass player needs a
