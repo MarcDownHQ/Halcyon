@@ -34,3 +34,20 @@ jobs:
 
       - name: The component builds
         run: cargo build --locked --release --target wasm32-wasip2
+
+  coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Toolchain, cargo-llvm-cov and ShellCheck
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+
+      - name: ShellCheck
+        run: shellcheck scripts/*.sh
+
+      - name: Line coverage at or above the floor
+        run: scripts/coverage.sh --check
