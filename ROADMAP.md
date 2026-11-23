@@ -15,7 +15,7 @@ follows [brain/glossary.md](brain/glossary.md); the reasons behind the shape are
 - [x] Clean-room specs: the per-source fact notes, the merged [SPEC](brain/specs/SPEC.md) and the first live probe
       ([2026-11-23](brain/specs/observations/2026-11-23-clients.md)).
 - [x] Name chosen: Halcyon (see [decisions](brain/decisions.md)).
-- [ ] Project skills: `brain`, `feature-treatment`, `release`.
+- [x] Project skills: `brain`, `feature-treatment`, `release`.
 - [ ] Release workflow: a `v*` tag attaches `halcyon.wasm` and its SHA-256 to a GitHub release.
 
 ## M1 - VOD through visionos, RSS catalog
