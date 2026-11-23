@@ -1,4 +1,4 @@
-# Distribution (Planned)
+# Distribution
 
 Halcyon will ship as one file, `halcyon.wasm`, a WebAssembly component for `wasm32-wasip2` built with
 `opt-level = "s"`, LTO, stripped symbols and one codegen unit. CI exists; the release workflow does not yet.
@@ -14,7 +14,7 @@ ending with the component build) and `coverage`.
 When M4 brings rquickjs, the build needs a wasi-sdk given through `WASI_SDK`; without it `rquickjs-sys` downloads
 one itself, which CI should avoid. Pin it in `.mise.toml` with the rest.
 
-## Releases (Planned, end of M0)
+## Releases
 
 As in Antenne: `.github/workflows/release.yml` on a `v*` tag checks the tag matches `version` in `Cargo.toml`, runs
 the tests, builds the component, writes `halcyon.wasm.sha256`, takes the release notes from the `CHANGELOG.md`
@@ -30,4 +30,4 @@ The user drops `halcyon.wasm` in Nightglass's `plugins` folder and restarts it; 
 - [Cargo.toml](../../Cargo.toml)
 - [.mise.toml](../../.mise.toml)
 - [rust-toolchain.toml](../../rust-toolchain.toml)
-- `.github/workflows/release.yml`: none yet, lands with the last item of M0.
+- `.github/workflows/release.yml`: the release on a `v*` tag.

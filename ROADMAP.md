@@ -16,7 +16,7 @@ follows [brain/glossary.md](brain/glossary.md); the reasons behind the shape are
       ([2026-11-23](brain/specs/observations/2026-11-23-clients.md)).
 - [x] Name chosen: Halcyon (see [decisions](brain/decisions.md)).
 - [x] Project skills: `brain`, `feature-treatment`, `release`.
-- [ ] Release workflow: a `v*` tag attaches `halcyon.wasm` and its SHA-256 to a GitHub release.
+- [x] Release workflow: a `v*` tag attaches `halcyon.wasm` and its SHA-256 to a GitHub release.
 
 ## M1 - VOD through visionos, RSS catalog
 

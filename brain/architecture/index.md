@@ -7,4 +7,4 @@
 | [youtube.md](youtube.md) | The most important current facts about YouTube, with pointers into the specs and observations |
 | [challenges.md](challenges.md) | (Planned, M4) The player script, STS, the n and signature solver, rquickjs |
 | [testing.md](testing.md) | The gate, coverage, fixtures, live-probe etiquette |
-| [distribution.md](distribution.md) | CI, (Planned) the release workflow, installing the plugin |
+| [distribution.md](distribution.md) | CI, the release workflow, installing the plugin |
