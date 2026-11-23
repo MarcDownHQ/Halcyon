@@ -1,0 +1,249 @@
+// Vendored from github.com/MarcDownHQ/nightglass, windows/wit/provider.wit at commit
+// bf205802976fc171a3509c157fd3ba68a699946c (master, PR #45). MIT, Copyright (c) 2026 MarcDownHQ.
+
+package nightglass:provider@0.3.0;
+
+interface types {
+    /// A source's settings, keyed by `field.key`. Fields left empty are absent.
+    type config = list<tuple<string, string>>;
+
+    enum field-kind {
+        text,
+        secret,
+        /// An http(s) address.
+        url,
+        /// An http(s) address or a local file. Plugins can't read local files: prefer `url`.
+        location,
+        mac,
+    }
+
+    record field {
+        key: string,
+        /// In English; the app translates the labels it knows.
+        label: string,
+        kind: field-kind,
+        required: bool,
+        placeholder: option<string>,
+        default: option<string>,
+    }
+
+    record preset {
+        label: string,
+        name: string,
+        config: config,
+    }
+
+    /// A desktop browser whose TLS and HTTP/2 handshake a request presents, for servers that turn other clients away.
+    enum browser {
+        chrome,
+        edge,
+        firefox,
+        safari,
+    }
+
+    record provider-info {
+        /// Unique among providers: lowercase letters, digits and `-`.
+        id: string,
+        name: string,
+        fields: list<field>,
+        /// Links are short-lived: `stream-url`, `movie-url` and `episode-url` are called at play time, and the `stream`
+        /// of a movie or an episode can be any text the plugin reads back there, not only an address.
+        resolves-streams: bool,
+        presets: list<preset>,
+    }
+
+    record channel {
+        id: string,
+        name: string,
+        number: option<s64>,
+        group: option<string>,
+        logo: option<string>,
+        epg-id: option<string>,
+        %stream: string,
+        headers: list<tuple<string, string>>,
+        /// Seconds of past programmes the server can replay.
+        catchup-window: option<u32>,
+    }
+
+    record movie {
+        id: string,
+        name: string,
+        group: option<string>,
+        poster: option<string>,
+        %stream: string,
+        rating: option<f64>,
+        plot: option<string>,
+        /// Seconds.
+        duration: option<u32>,
+        /// Unix seconds, for a replay that expires.
+        available-until: option<s64>,
+    }
+
+    record series {
+        id: string,
+        name: string,
+        group: option<string>,
+        poster: option<string>,
+        rating: option<f64>,
+        plot: option<string>,
+    }
+
+    record episode {
+        id: string,
+        title: string,
+        /// Dated broadcasts (news, magazines) have neither season nor number.
+        season: option<s64>,
+        number: option<s64>,
+        %stream: string,
+        plot: option<string>,
+        /// Unix seconds.
+        aired: option<s64>,
+        /// Seconds.
+        duration: option<u32>,
+        /// A still of this episode, http(s); the series' poster stands for the show.
+        thumbnail: option<string>,
+        /// Unix seconds, for a replay that expires.
+        available-until: option<s64>,
+    }
+
+    /// A guide entry, matched to channels by `epg-id`. Times are Unix seconds.
+    record programme {
+        channel: string,
+        start: s64,
+        end: s64,
+        title: string,
+        desc: option<string>,
+    }
+
+    record account {
+        status: option<string>,
+        /// Unix seconds.
+        expires: option<s64>,
+        max-connections: option<s64>,
+        active-connections: option<s64>,
+        trial: bool,
+    }
+
+    record catalog {
+        channels: list<channel>,
+        movies: list<movie>,
+        series: list<series>,
+        /// An XMLTV guide for the channels.
+        epg-url: option<string>,
+        account: option<account>,
+        /// Guide entries sent with the catalog, for sources that have no XMLTV guide.
+        programmes: list<programme>,
+    }
+
+    /// The app fetches the stream for the player, which then opens it on 127.0.0.1. HLS playlists are rewritten so
+    /// that every playlist, segment and key they name comes back through the app.
+    record relay {
+        /// Every request of the stream presents this browser's handshake.
+        browser: option<browser>,
+        /// Every answer goes through the `filter` export before the player gets it.
+        filter: bool,
+    }
+
+    /// A stream kept apart from the main one: an audio in another language, the audio of a video-only stream,
+    /// subtitles.
+    record track {
+        url: string,
+        /// An ISO 639 code, which the player's language preferences match.
+        language: option<string>,
+        /// Shown in the track menus.
+        title: option<string>,
+    }
+
+    /// What the player opens.
+    record playback {
+        url: string,
+        /// Sent with every request of the stream and its tracks, over the channel's own.
+        headers: list<tuple<string, string>>,
+        relay: option<relay>,
+        /// Played alongside `url`, with the same headers and relay, in order of preference.
+        tracks: list<track>,
+    }
+
+    /// A playlist, segment or key on its way to the player.
+    record media {
+        content-type: option<string>,
+        body: list<u8>,
+    }
+
+    variant error {
+        /// The server answered with this status.
+        http(u16),
+        auth-failed,
+        bad-response(string),
+        network(string),
+        /// The named setting is missing or invalid.
+        setting(string),
+    }
+}
+
+/// The only way out of the sandbox.
+interface http {
+    use types.{browser, error};
+
+    record request {
+        method: string,
+        url: string,
+        headers: list<tuple<string, string>>,
+        body: option<list<u8>>,
+        /// Sent with this browser's handshake rather than the app's own.
+        browser: option<browser>,
+    }
+
+    record response {
+        status: u16,
+        headers: list<tuple<string, string>>,
+        body: list<u8>,
+    }
+
+    /// http and https only. Any status is a response; only a failed connection is an error.
+    send: func(request: request) -> result<response, error>;
+}
+
+/// What a plugin keeps between calls, each of which runs in a fresh instance: a login token, cookies, the state of a
+/// playback its `filter` follows. Each plugin sees only its own keys, shared by all its sources.
+interface storage {
+    /// None once the value has expired.
+    get: func(key: string) -> option<string>;
+    /// `ttl`: seconds before the value expires. `persist`: kept on disk across launches, otherwise forgotten when the
+    /// app quits. Keys are at most 256 bytes, values 1 MiB, and a plugin's keys and values 16 MiB together.
+    set: func(key: string, value: string, ttl: option<u32>, persist: bool) -> result<_, string>;
+    delete: func(key: string);
+}
+
+interface log {
+    enum level {
+        debug,
+        info,
+        warn,
+        error,
+    }
+
+    log: func(level: level, message: string);
+}
+
+world provider {
+    import http;
+    import storage;
+    import log;
+
+    use types.{config, provider-info, catalog, channel, movie, series, episode, playback, media, error};
+
+    export describe: func() -> provider-info;
+    export load-catalog: func(config: config) -> result<catalog, error>;
+    /// Only called when `resolves-streams` is set.
+    export stream-url: func(config: config, channel: channel) -> result<playback, error>;
+    export catchup-url: func(config: config, channel: channel, start: s64, end: s64) -> result<playback, error>;
+    export episodes: func(config: config, series: series) -> result<list<episode>, error>;
+    /// Only called when `resolves-streams` is set.
+    export movie-url: func(config: config, movie: movie) -> result<playback, error>;
+    /// Only called when `resolves-streams` is set.
+    export episode-url: func(config: config, series: series, episode: episode) -> result<playback, error>;
+    /// Only called while the app relays a playback whose `relay.filter` is set: an answer from `url`, changed before
+    /// the player gets it.
+    export filter: func(config: config, url: string, media: media) -> result<media, error>;
+}
