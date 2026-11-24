@@ -8,7 +8,7 @@ follows [brain/glossary.md](brain/glossary.md); the reasons behind the shape are
 ## M0 - Foundation
 
 - [x] Single Rust crate building a `wasm32-wasip2` component against Nightglass's `wit/provider.wit` (vendored,
-      `nightglass:provider@0.3.0`), with the logic in plain Rust and wit-bindgen only in `src/wasm.rs`.
+      `nightglass:provider@0.4.0`), with the logic in plain Rust and wit-bindgen only in `src/wasm.rs`.
 - [x] CI on GitHub-hosted runners: format, clippy (host and wasm), tests, the component builds.
 - [x] 98% line coverage floor (`scripts/coverage.sh --check`, a CI job).
 - [x] Docs: `CLAUDE.md`, README, roadmap, TODO, changelog, and the brain.
@@ -67,26 +67,26 @@ The smallest useful slice. No JS engine, no PO token, no relay.
 
 ## M5 - Captions, quality and chapters
 
-Replaces SPEC's captions-only M5 with the three player features asked for. Each needs work on the Nightglass side
-too; the facts on what YouTube offers for each are being gathered in
-[chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md).
+Replaces SPEC's captions-only M5 with the three player features asked for. What YouTube offers for each is in
+[chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md). The Nightglass side landed in contract 0.4.0
+(nightglass PR #46): a Quality menu over the video tracks, `playback.chapters`, and the existing subtitle menu.
 
 - [ ] **Subtitles.** Caption tracks as `playback.tracks` (VTT, `xosf` removed, `exp`-gated tracks skipped, manual
-      before auto-generated, about 10 at most). They already fit the contract; the Nightglass player needs a
-      subtitle selector to pick among them.
-- [ ] **Quality selector.** Open decision: hand the player several video tracks (one per height) or the HLS master
-      (whose variants the player can switch between), and in either case the player needs a quality menu. The
-      `quality` field stays as the cap.
-- [ ] **Chapters.** Open decision: a contract addition such as `playback.chapters` (title and start time), and the
-      player showing them on the seek bar and in a menu. Where the chapter list comes from is in the coming notes.
+      before auto-generated, about 10 at most). Nightglass's existing subtitle menu picks among them.
+- [ ] **Quality selector.** Nightglass's Quality menu lists the video tracks mpv sees. Open decision: hand it
+      several video-only formats as tracks (mpv opens each at load but reads only the chosen one), or the HLS
+      master (H.264 and VP9 only, no AV1). The `quality` field stays as the cap.
+- [ ] **Chapters.** `playback.chapters` (start in seconds, title), from `/next` (not `/player`; visionos returns
+      none), shown by Nightglass on the seek bar, in a menu and with Page ↑ ↓.
 - [ ] Audio-track polish: auto-dubbed languages last, an option for DRC audio.
 
 ## M6 - Login
 
 - [ ] TV device-code sign-in with token refresh. Decided: login comes now, not earlier; public videos keep the
       anonymous path even when signed in.
-- [ ] The sign-in code shown through a Nightglass contract extension, to be proposed to Nightglass. Decided: not the
-      `catalog.account.status` and placeholder-series workaround of SPEC 8.2.
+- [ ] The sign-in code shown through the `action-required` prompt of contract 0.4.0 (message, address, code,
+      `retry-in`), which the Sources screen shows and retries. Decided: not the `catalog.account.status` and
+      placeholder-series workaround of SPEC 8.2.
 - [ ] Brand accounts through `accounts_list` and `X-Goog-Pageid`.
 - [ ] A logged-in TV client for age-gated, members-only and private videos.
 - [ ] Watch Later, Liked, library playlists and subscriptions as series.

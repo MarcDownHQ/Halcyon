@@ -30,7 +30,7 @@ Halcyon's code is written only from `brain/specs/` and from live observation of 
 
 ## Invariants
 
-- **The contract is `wit/provider.wit`** (`nightglass:provider@0.3.0`), vendored from Nightglass; its header names the
+- **The contract is `wit/provider.wit`** (`nightglass:provider@0.4.0`), vendored from Nightglass; its header names the
   commit. Only `src/wasm.rs` touches wit-bindgen; everything else is plain Rust that builds and is tested natively.
 - **Each call runs in a fresh instance.** Anything kept between calls goes through storage, with a time to live no
   longer than what it keeps stays valid (format URLs about 6 h, an access token its `expires_in`). A storage

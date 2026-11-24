@@ -1,6 +1,6 @@
 # The host contract
 
-`wit/provider.wit` (package `nightglass:provider@0.3.0`, world `provider`) is vendored from Nightglass; its header
+`wit/provider.wit` (package `nightglass:provider@0.4.0`, world `provider`) is vendored from Nightglass; its header
 names the source commit. Nightglass is MIT. Each export below is marked with what it does today and, where it is
 still to build, what it is **(Planned)** to do and when.
 

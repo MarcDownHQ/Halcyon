@@ -20,8 +20,9 @@ videos keep the anonymous path even when signed in: login adds risk to the accou
 
 ## Showing the code
 
-Decided: through a Nightglass contract extension, proposed to Nightglass as part of a 0.4.0 wish list (see
-[TODO.md](../../TODO.md)): a short prompt with the address and the code, cleared once signed in. The spec's
+Through the `action-required(prompt)` error of Nightglass contract 0.4.0 (PR #46): `load-catalog` answers it with
+the message, the `verification_url` and the `user_code` of the device-code answer, and `retry-in` set to the polling
+interval. The Sources screen shows it under the source and asks again until the plugin answers something else. The spec's
 workaround (the code in `catalog.account.status` and in a placeholder series) is not the plan. See
 [decisions.md](../decisions.md).
 
