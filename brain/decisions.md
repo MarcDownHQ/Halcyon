@@ -60,8 +60,8 @@ the logged-in clients are TV clients that need the M4 solver.
 
 The device-code flow needs to show the user a code and an address. The spec's workaround puts them in
 `catalog.account.status` and a fake series; that misuses both and depends on whether the app shows the status.
-Halcyon instead proposes a contract extension to Nightglass (a sign-in prompt a plugin can raise and clear), on the
-0.4.0 wish list in [TODO.md](../TODO.md).
+Halcyon asked Nightglass for a contract extension instead: the `action-required(prompt)` error of contract 0.4.0
+(nightglass PR #46), which the Sources screen shows with the address and the code and retries.
 
 ## 9. The name
 

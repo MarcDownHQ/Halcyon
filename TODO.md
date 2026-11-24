@@ -40,8 +40,8 @@ Small, concrete work: fixes, chores, decisions to make before a roadmap item sta
 
 ## Before M5 (captions, quality, chapters)
 
-- [ ] Read [chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md), then decide how quality is offered (several
-      video tracks or the HLS master) and the shape of chapters in the contract.
+- [ ] Decide how quality is offered: several video-only formats as tracks, or the HLS master. See
+      [chapters-quality-subs](brain/specs/sources/chapters-quality-subs.md) and the Quality menu of Nightglass 0.4.0.
 
 ## Before M6 (login)
 
@@ -50,8 +50,7 @@ Small, concrete work: fixes, chores, decisions to make before a roadmap item sta
 - [ ] **Q13.** Does YouTube enforce `slow_down` on device-code polling?
 - [ ] **Q14, cookie rotation.** Is writing `Set-Cookie` back from the plugin's own requests enough to keep
       `__Secure-1PSIDTS` alive?
-- [ ] Q5 (does the app show `catalog.account.status`) is settled by the decision to propose a sign-in prompt in
-      the contract; see the wish list below.
+- [x] Q5 (does the app show `catalog.account.status`) is settled: contract 0.4.0 has the `action-required` prompt.
 
 ## Later (M7, M8)
 
@@ -61,14 +60,3 @@ Small, concrete work: fixes, chores, decisions to make before a roadmap item sta
       integrity-token length (88 against 92) tells a good token from a bad one, whether a stored integrity token
       feeds a fresh VM, the GVS binding; which token-gated clients return plain URLs with a token.
 - [ ] **Q20.** Subtitle translation and Premium formats.
-
-## Nightglass contract 0.4.0 wish list
-
-To propose to Nightglass, each with the use Halcyon has for it.
-
-- [ ] **A sign-in prompt.** A way for a plugin to show a short message with a code and an address ("visit
-      youtube.com/activate and enter ABCD-EFGH") while a device-code sign-in is pending, and to clear it. Needed
-      for M6.
-- [ ] **Chapters.** `playback.chapters`, a list of titles with start times, shown by the player. Needed for M5.
-- [ ] **Quality variants**, maybe. Either a way to label several video tracks as qualities of one stream, or
-      nothing if returning the HLS master is enough. Decide once M5's research is in.

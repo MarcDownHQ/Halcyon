@@ -11,26 +11,28 @@ before deciding.
   `playback.tracks`: the `baseUrl` made absolute, `xosf` removed, `fmt=vtt` added. `language` is the
   `languageCode`, `title` the track name plus " (auto)" for auto-generated ones. Manual tracks first, about 10 at
   most. Tracks whose `exp` asks for a PO token are skipped. Translation (`tlang`) is later.
-- **Nightglass**: the contract already carries them; the player needs a subtitle menu to pick one, or none.
+- **Nightglass**: the contract carries them, and the player's subtitle menu picks one, or none.
 - Observed 2026-11-23: `visionos` captions came back as valid WebVTT with no token.
 
 ## Quality selector
 
 - Today's plan (M1) picks one video format under the `quality` cap.
 - **Open decision**: let the viewer switch by either
-  - returning several video-only formats, one per height, as tracks the player can choose between (the contract has
-    no way to mark a track as a video quality rather than an alternative), or
+  - returning several video-only formats, one per height, as tracks (mpv opens each at load and then reads only the
+    chosen one; a track's `title` becomes its label in the menu), or
   - returning the client's HLS master, whose variants the player switches between (`visionos` lists H.264 and VP9
     up to 2160p60 with separate audio groups and a subtitle rendition). The cost: HLS variant choice is the
     player's, and dubbed audio and captions come only as the master names them.
-- **Nightglass**: a quality menu in the player either way; perhaps a contract addition to label variants.
+- **Nightglass**: since contract 0.4.0 (PR #46), a Quality menu over mpv's video tracks, labelled by the track's
+  title or its height, frame rate, codec and HLS bitrate; the chosen height is remembered.
 
 ## Chapters
 
-- **Open decision**: a contract addition such as `playback.chapters`, a list of titles with start times, and the
-  player showing them on the seek bar and in a menu. Where YouTube exposes chapters, and how reliably, is for the
-  coming notes.
-- **Nightglass**: both the contract change and the player UI.
+- **Contract**: `playback.chapters`, each a `start` in seconds and a `title` (Nightglass 0.4.0, PR #46). The app sorts
+  them, drops empty titles and non-finite starts, and shows them on the seek bar, in a Chapters menu and with
+  Page ↑ ↓.
+- **Halcyon**: chapters come from `/next`, not `/player`, and `visionos` returns none, so an extra `/next` call
+  with a client that has them (see [chapters-quality-subs](../specs/sources/chapters-quality-subs.md)).
 
 ## Sources
 
