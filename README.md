@@ -1,4 +1,4 @@
-<p align="center"><img src="icon.svg" alt="Halcyon" width="128"></p>
+<p align="center"><img src="icon.png" alt="Halcyon" width="128"></p>
 
 # Halcyon
 
